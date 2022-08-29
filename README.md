@@ -102,15 +102,15 @@ We also need to ufw allow Nginx HTTP to enable Nginx connections.
 
 To make this setup production ready, I would ideally have a list of IPs that I would like to enter in the settings here:
 ```
-root@ubuntu-task-georgi:/etc/nginx/conf.d# ufw status
+root@ubuntu-task-georgi:~# ufw status numbered
 Status: active
 
-To                         Action      From
---                         ------      ----
-22/tcp                     ALLOW       Anywhere
-Nginx HTTP                 ALLOW       Anywhere
-22/tcp (v6)                ALLOW       Anywhere (v6)
-Nginx HTTP (v6)            ALLOW       Anywhere (v6)
+     To                         Action      From
+     --                         ------      ----
+[ 1] 22                         ALLOW IN    Anywhere
+[ 2] 80                         ALLOW IN    Anywhere
+[ 3] 22 (v6)                    ALLOW IN    Anywhere (v6)
+[ 4] 80 (v6)                    ALLOW IN    Anywhere (v6)
 ```
 
 For example, we can enable ssh only for a specific set of machines that will manage this VM, the HTTP connections would ideally be accessible to only a list of machines, not Anywhere, how it’s the current setup. However, I don’t have a list of IPs that would like to enable this machine currently, so I left all the settings open for the review of the task to be completed. However, this is not a good practice. All other connections on the rest of the ports should be handled and denied by default on the machine.UFW is configured to deny all incoming connections by default.
