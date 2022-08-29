@@ -1,8 +1,7 @@
 **Welcome to the DevOps interview homework for LucidLink.**
 
-**Task1:
-Create an init/systemd config that starts the LucidLink client on boot and stops it on shutdown. Ensure that the password is not visible on: ps ax
-**
+**Task1: Create an init/systemd config that starts the LucidLink client on boot and stops it on shutdown. Ensure that the password is not visible on: ps ax**
+
 
 I went ahead with a systemd config to manage the lucidlink client. Systemd is a (relatively new) system and service manager for Linux operating systems. It is designed to be backwards compatible with SysV init scripts, and provides several features such as parallel startup of system services at boot time, on-demand activation of daemons, or dependency-based service control logic.
 
