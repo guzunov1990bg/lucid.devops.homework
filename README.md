@@ -127,6 +127,8 @@ This folder contains the following:
 - The actual playbook.
 - An inventory file.
 
+I've set the same files in ~/ansible (root home folder /ansible). The ansible playbook can be run from there.
+
 I would not call this production ready, but this is what I've come up with for the time I had to spend on the task.
 
 ToDo list can be found [HERE](https://docs.google.com/document/d/1jjqd08yTLuAO7PlEWstrWnCDLa9KcLaNFaTHsTI35WQ/edit?usp=sharing "HERE").
