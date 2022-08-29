@@ -1,0 +1,100 @@
+---
+- name: Copy files for SystemD service and enable the service.
+  hosts: all
+
+  tasks:
+
+    - name: Copying password and setting permissions.
+      copy:
+        remote_src: yes
+        src: ~/ansible/pass.txt
+        dest: /usr/local/sbin/pass.txt
+        mode: 0400
+
+    - name: Copying lucid scrip and setting permissions.
+      copy:
+        remote_src: yes
+        src: ~/ansible/lucid.sh
+        dest: /usr/local/sbin/lucid.sh
+        mode: 0744
+
+    - name: Copying start script and setting permissions.
+      copy:
+        remote_src: yes
+        src: ~/ansible/start.sh
+        dest: /usr/local/sbin/start.sh
+        mode: 0744
+
+    - name: Copying the systemD service to /etc/...
+      copy:
+        remote_src: yes
+        src: ~/ansible/joro.service
+        dest: /etc/systemd/system/joro.service
+
+    - name: Enable joro.service
+      systemd:
+        name: joro.service
+        enabled: yes
+
+    - name: daemon reload
+      systemd:
+        daemon_reload: yes
+
+    - name: Make sure joro.service is running
+      systemd:
+        name: joro.service
+        state: started
+
+- name: Install and configure NGINX
+  hosts: all
+
+  tasks:
+
+    - name: Install nginx server
+      apt:
+        name: ['nginx']
+        state: present
+
+    - name: Install credentials generator
+      apt:
+        name: ['apache2-utils']
+        state: present
+
+    - name: Copy NGinx config file
+      copy:
+        remote_src: yes
+        src: ~/ansible/lucid_api.conf
+        dest: /etc/nginx/conf.d/lucid_api.conf
+
+    - name: Create nginx credentials
+      expect:
+        command: 'htpasswd -c /etc/apache2/.htpasswd niki'
+        responses:
+          "New password: ": 'niki'
+          "Re-type new password: ": 'niki'
+
+
+    - name: Check if credentials are created
+      stat:
+         path: /etc/apache2/.htpasswd
+      register: result
+
+    - name: Restart NGINX
+      service:
+        name: nginx
+        state: restarted
+
+- name: Set UFW security rules
+  hosts: all
+
+  tasks:
+
+     - name: Set SSH rules
+       ufw:
+         rule: allow
+         port: '22'
+
+     - name: set NGINX rules
+       ufw:
+          rule: allow
+          port: '80'
